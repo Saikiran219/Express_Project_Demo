@@ -1,27 +1,23 @@
-const constants=require("../constants")
-const errorHandler=(err,req,res,next)=>{
-    const statusCode=res.statusCode?res.statusCode:500;
-    switch(statusCode){
-        case constants.VALIDATION:
-            res.json({title:"validation",message:err.message,stackTrace:err.stack});
-            break;
-        case constants.NOT_FOUND:
-            res.json({title:"NOt Found",message:err.message,stackTrace:err.stack});
-            break;
-        case constants.AUTHORIZATION:
-            res.json({title:"Authorization",message:err.message,stackTrace:err.stack});
-            break;
-        case constants.FORBIDDEN:
-            res.json({title:"Forbidden",message:err.message,stackTrace:err.stack});
-            break;
-        default:
-            console.log("All good no error!!");
-            break;
+const constants = require("../constants");
 
+const errorHandler = (err, req, res, next) => {
+    const statusCode = res.statusCode? res.statusCode : 500; // ✅ Use `err.statusCode` if available
 
-    }
-
-
+    res.status(statusCode).json({
+        title: getErrorTitle(statusCode), // ✅ Now correctly sets "Not Found"
+        message: err.message,
+        stackTrace: process.env.NODE_ENV == "development" ? err.stack : "🔒"
+    });
 };
 
-module.exports=errorHandler
+const getErrorTitle = (statusCode) => {
+    switch (statusCode) {
+        case constants.VALIDATION: return "Validation Error";
+        case constants.NOT_FOUND: return "Not Found";  // ✅ Correctly sets "Not Found"
+        case constants.AUTHORIZATION: return "Authorization Error";
+        case constants.FORBIDDEN: return "Forbidden";
+        default: return "Server Error";
+    }
+};
+
+module.exports = errorHandler;

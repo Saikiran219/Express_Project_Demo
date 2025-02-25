@@ -10,14 +10,11 @@ const RegisterUser = asynchandler(async (req, res) => {
         res.status(400);
         throw new Error("All Fields Are Mandatory");
     }
-
     const userExists = await User.findOne({ email });
-
     if (userExists) {
         res.status(400);
         throw new Error("User Email Already Exists");
     }
-
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await User.create({
@@ -25,7 +22,6 @@ const RegisterUser = asynchandler(async (req, res) => {
         email,
         password: hashedPassword
     });
-
     if (!user) {
         res.status(500); // Changed to 500 for internal server error
         throw new Error("User creation failed");
@@ -42,19 +38,18 @@ const LoginUser = asynchandler(async (req, res) => {
         res.status(400);
         throw new Error("All Fields Are Mandatory!");
     }
-
     const userExists = await User.findOne({ email });
-
     if (userExists && (await bcrypt.compare(password, userExists.password))) {
         const accessToken = jwt.sign(
             {
                 user: {
                     username: userExists.username,
-                    email: userExists.email
+                    email: userExists.email,
+                    id:userExists.id
                 }
             }, 
             process.env.ACCESS_TOKEN_SECRET, 
-            { expiresIn: "1m" }
+            { expiresIn: "10m" }
         );
 
         res.status(200).json({ accessToken });
@@ -66,6 +61,6 @@ const LoginUser = asynchandler(async (req, res) => {
 
 
 const GetUserByID=asynchandler(async(req,res)=>{
-    res.status(200).json({message:"this is the User page"});
+    res.status(200).json(req.user);
 });
 module.exports={RegisterUser,LoginUser,GetUserByID};

@@ -14,6 +14,10 @@ const userSchema= new mongoose.Schema({
         type: String, 
         required: [true, "Please add the password field"], 
     },
+    isAdmin:{
+        type:Boolean,
+        required:[true,"Please give the role"]
+    }
 },{
     timestamps:true,
 });

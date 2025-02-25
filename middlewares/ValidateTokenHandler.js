@@ -1,4 +1,6 @@
 const jwt = require("jsonwebtoken");
+//const debugstart=require('debug')('app:start')
+//const debugdb=require('debug')('app:db')
 const asyncHandler = require("express-async-handler");
 const util = require("util");
 
@@ -7,7 +9,7 @@ const verifyTokenAsync = util.promisify(jwt.verify);
 const validateToken = asyncHandler(async (req, res, next) => {
     let token;
     let authHeader = req.headers.Authorization || req.headers.authorization;
-
+    // debugstart(authHeader);
     if (authHeader && authHeader.startsWith("Bearer")) {
         token = authHeader.split(" ")[1];
     }

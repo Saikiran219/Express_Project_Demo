@@ -20,7 +20,8 @@ const RegisterUser = asynchandler(async (req, res) => {
     const user = await User.create({
         username,
         email,
-        password: hashedPassword
+        password: hashedPassword,
+        isAdmin:false,
     });
     if (!user) {
         res.status(500); // Changed to 500 for internal server error
@@ -45,7 +46,8 @@ const LoginUser = asynchandler(async (req, res) => {
                 user: {
                     username: userExists.username,
                     email: userExists.email,
-                    id:userExists.id
+                    id:userExists.id,
+                    isAdmin:userExists.isAdmin
                 }
             }, 
             process.env.ACCESS_TOKEN_SECRET, 
@@ -59,8 +61,23 @@ const LoginUser = asynchandler(async (req, res) => {
     }
 });
 
+const AssignRole=asynchandler(async(req,res)=>{
+    const { email } = req.body; 
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+        res.status(404);
+        throw new Error('User not found');
+    }
+    user.isAdmin = true;
+    await user.save();
+
+    res.status(200).json({ message: `User with email ${email} is now an admin` });
+});
 
 const GetUserByID=asynchandler(async(req,res)=>{
     res.status(200).json(req.user);
 });
-module.exports={RegisterUser,LoginUser,GetUserByID};
+
+module.exports={RegisterUser,LoginUser,GetUserByID,AssignRole};

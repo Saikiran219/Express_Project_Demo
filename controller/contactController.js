@@ -16,11 +16,20 @@ const getContactBYId =  asyncHandler(async (req,res)=>{
 });
 
 const createContact =  asyncHandler(async (req,res,next)=>{
-    console.log("request nody is",req.body);
     const {name,email,phone}=req.body
-    if(!name || !email){
+    if(!name || !email || !phone){
         res.status(400)
         throw new Error("All feilds are mandatory")
+    }
+    const contactExists = await Contact.find()
+    .and([
+        { email: email },
+        { phone: phone },
+        { user_id: req.user.id },
+    ]);
+    if (contactExists.length > 0){
+        res.status(400)
+        throw new Error(`conatct with the eamil ${email} or phone num ${phone} Already Exists`)
     }
     const contact=await Contact.create({
         name,

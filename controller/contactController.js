@@ -68,5 +68,5 @@ const deleteContactBYId=  asyncHandler(async (req,res,next)=>{
 });
 
 
-
+//no longer need this middle ware
 module.exports={getcontacts,getContactBYId,createContact,updateContactById,deleteContactBYId}

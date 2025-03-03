@@ -4,9 +4,9 @@ const jwt=require("jsonwebtoken")
 const bcrypt=require("bcrypt");
 
 const RegisterUser = asynchandler(async (req, res) => {
-    const { username, email, password } = req.body;
+    const { username, email, password,phoneNumber } = req.body;
 
-    if (!username || !email || !password) {
+    if (!username || !email || !password || !phoneNumber) {
         res.status(400);
         throw new Error("All Fields Are Mandatory");
     }
@@ -20,6 +20,7 @@ const RegisterUser = asynchandler(async (req, res) => {
     const user = await User.create({
         username,
         email,
+        phoneNumber,
         password: hashedPassword,
         isAdmin:false,
     });

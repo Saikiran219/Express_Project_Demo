@@ -10,6 +10,10 @@ const userSchema= new mongoose.Schema({
         required: [true, "Please add the email field"],
         unique:[true,"Email Already Exists"], 
     },
+    phoneNumber:{
+          type:String,
+          required: [true,"please add the phone number feild"],
+    },
     password: {
         type: String, 
         required: [true, "Please add the password field"], 

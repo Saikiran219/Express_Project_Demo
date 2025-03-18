@@ -52,7 +52,7 @@ const LoginUser = asynchandler(async (req, res) => {
                 }
             }, 
             process.env.ACCESS_TOKEN_SECRET, 
-            { expiresIn: "10m" }
+            { expiresIn: 1800  }
         );
 
         res.status(200).json({ accessToken });
@@ -80,5 +80,6 @@ const AssignRole=asynchandler(async(req,res)=>{
 const GetUserByID=asynchandler(async(req,res)=>{
     res.status(200).json(req.user);
 });
+
 
 module.exports={RegisterUser,LoginUser,GetUserByID,AssignRole};

@@ -12,6 +12,7 @@ app.use(cors());
 app.use("/api/contacts",require("./routes/contactRoute"));
 app.use("/api/videos",require("./routes/videoRoutes"));
 app.use("/api/users",require("./routes/userRoute"));
+app.use("/api/movies",require("./routes/watchedMovieRoute"))
 app.use(errorHandler);
 app.listen(port,()=>{
     console.log(`server listening to the ${port}`);

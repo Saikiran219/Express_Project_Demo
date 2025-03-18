@@ -8,10 +8,14 @@ const verifyTokenAsync = util.promisify(jwt.verify);
 
 const validateToken = asyncHandler(async (req, res, next) => {
     let token;
+
+
     let authHeader = req.headers.Authorization || req.headers.authorization;
     // debugstart(authHeader);
     if (authHeader && authHeader.startsWith("Bearer")) {
         token = authHeader.split(" ")[1];
+        // const decoded = jwt.decode(token);
+        // console.log("Token Expires At:", new Date(decoded.exp * 1000).toLocaleString());
     }
     if (!token) {
         res.status(401);
